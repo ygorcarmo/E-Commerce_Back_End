@@ -10,16 +10,15 @@ router.get('/', (req, res) => {
       include: [
         {
           // be sure to include its associated Products
-          model: Product, 
-          attributes: ['id', 'product_name', 'price', 'stock', 'category_id']
+          model: Product,
         },
       ],
     })
-    .then((category) => {
-      if(!category) {
+    .then((categories) => {
+      if(!categories) {
         return res.status(404).json({message: 'No categories found'});
       };
-      res.status(200).json(category);
+      res.status(200).json(categories);
     });
   } catch (err) {
     res.status(500).json(err);
@@ -27,8 +26,21 @@ router.get('/', (req, res) => {
 });
 
 router.get('/:id', (req, res) => {
-  // find one category by its `id` value
-  // be sure to include its associated Products
+  try{
+    // find one category by its `id` value
+    Category.findByPk(req.params.id, 
+      // be sure to include its associated Products
+      {include: [ {model : Product}],})
+      .then((idcategorie) => {
+        if(!idcategorie) {
+          return res.status(404).json({message: 'No categorie with this ID found'});
+        };
+        res.status(200).json(idcategorie);
+      });
+
+  }catch(error){
+    res.status(500).json(error);
+  }
 });
 
 router.post('/', (req, res) => {

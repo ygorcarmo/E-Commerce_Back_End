@@ -61,6 +61,27 @@ router.post('/', (req, res) => {
 
 router.put('/:id', (req, res) => {
   // update a category by its `id` value
+  try {
+		const putCat = Category.update(
+			{
+				category_name: req.body.category_name,
+			},
+			{
+				where: {
+					id: req.params.id,
+				},
+			}
+		);	
+		if (!putCat) {
+			res.status(404).json({ message: "Invalid Category" });
+			return;
+		}else if(!req.body.category_name){
+      return res.status(400).json({ message: "Bad Request" });
+    }	
+		res.status(200).json("Category updated");	
+	} catch (err) {
+		res.status(500).json(err);
+	}
 });
 
 router.delete('/:id', (req, res) => {

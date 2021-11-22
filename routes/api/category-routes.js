@@ -45,6 +45,12 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
+    /* req.body should look like this...
+    {
+      "id": 6,
+    "category_name": "Coffee"
+    }
+  */
   try{
     const newCat = Category.create(req.body);
     if(!req.body.category_name) {
@@ -87,7 +93,7 @@ router.put('/:id', (req, res) => {
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
   try {
-    const delCat = await Category.destroy({
+    const delCat = Category.destroy({
       where: {
         id: req.params.id
       }

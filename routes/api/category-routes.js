@@ -54,7 +54,7 @@ router.post('/', (req, res) => {
     };
 
   }catch(error){
-    res.status(400).json(error);
+    res.status(500).json(error);
   }
 
 });
@@ -86,6 +86,21 @@ router.put('/:id', (req, res) => {
 
 router.delete('/:id', (req, res) => {
   // delete a category by its `id` value
+  try {
+    const delCat = await Category.destroy({
+      where: {
+        id: req.params.id
+      }
+    });
+    if(!delCat) {
+     return res.status(404).json({ message: "Category Not Found" });
+    } else {res.status(200).json({
+        message: "Category Deleted!"
+      });
+    };
+   } catch (err) {
+     res.status(500).json(err);
+   }
 });
 
 module.exports = router;

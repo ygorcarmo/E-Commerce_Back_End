@@ -21,30 +21,28 @@ router.get('/', (req, res) => {
       res.status(200).json(products);
     });
   } catch (err){
-    console.log(err);
-    res.status(500).json(err);
-
-  }
+    res.status(500).json(err);}
 });
 
 // get one product
 router.get('/:id', (req, res) => {
   try {
-    // find a single product by its `id`
-		const productData = Product.findByPk(req.params.id, {
-      // be sure to include its associated Category and Tag data
-			include: [
-        { model: Category },
-        { model: Tag }],
-		});
-		if (!productData) {
-			res.status(404).json({ message: `Product Not Found`});
-			return;
-		}
-		res.status(200).json(productData);
-	} catch (err) {
-		res.status(500).json(err);
-	}
+    Product.findByPk(
+        req.params.id,{
+
+          include: [{ model: Category }, { model: Tag }],
+        },
+    )
+    .then((idproduct) => {
+      if (!idproduct) {
+        return res.status(404).json({ message: "Product Not Found" });
+      };
+      res.status(200).json(idproduct)
+    });
+  } catch (err) {
+    console.log(err);
+    res.status(400).json(err);
+  };
 });
 
 // create new product

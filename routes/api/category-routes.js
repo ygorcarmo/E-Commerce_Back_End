@@ -45,6 +45,18 @@ router.get('/:id', (req, res) => {
 
 router.post('/', (req, res) => {
   // create a new category
+  try{
+    const newCat = Category.create(req.body);
+    if(!req.body.category_name) {
+      return res.status(400).json({ message: "Bad Request" });
+    } else {      
+      res.status(200).json(newCat);
+    };
+
+  }catch(error){
+    res.status(400).json(error);
+  }
+
 });
 
 router.put('/:id', (req, res) => {
